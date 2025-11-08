@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { TestTube2, Loader2, Thermometer } from 'lucide-react';
+import { Loader2, Thermometer } from 'lucide-react';
 import Image from 'next/image';
 import {
   useDatabase,
@@ -34,12 +34,6 @@ export default function Dashboard() {
     }
   }, [user, isUserLoading, auth]);
 
-  const simulateNewReading = () => {
-    if (!user || !database || !readingRef) return;
-    const newReading = getRandom(1.8, 3.5);
-    set(readingRef, newReading);
-  };
-
   const simulateNewTemp = () => {
     if (!user || !database || !tempRef) return;
     const newTemp = getRandom(18, 25);
@@ -59,7 +53,7 @@ export default function Dashboard() {
           <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
             <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
-                <p className="text-green-400 font-mono text-sm tracking-widest">
+                <p className="text-green-400 font-mono text-base tracking-widest">
                     {isLoading ? '...' : latestReading ? latestReading.toFixed(2) : '0.00'}
                 </p>
             </div>
@@ -70,10 +64,6 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex gap-4 mt-8">
-            <Button onClick={simulateNewReading} disabled={isLoading || !user}>
-              {isReadingLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <TestTube2 className="mr-2 h-4 w-4" />}
-              {isLoading ? 'Connecting...' : 'Simulate Reading'}
-            </Button>
             <Button onClick={simulateNewTemp} disabled={isLoading || !user} variant="outline">
               {isTempLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Thermometer className="mr-2 h-4 w-4" />}
               {isLoading ? 'Connecting...' : 'Simulate Temp'}
@@ -84,4 +74,3 @@ export default function Dashboard() {
     </div>
   );
 }
-    
