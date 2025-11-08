@@ -34,7 +34,7 @@ export default function Dashboard() {
   const isLoading = isUserLoading || isReadingLoading || isTempLoading;
 
   return (
-    <div className="grid gap-6 justify-center">
+    <div className="grid gap-6">
       <Card className="w-full">
           <CardHeader>
               <CardTitle className="text-center">MMCL Multimeter</CardTitle>
@@ -42,7 +42,7 @@ export default function Dashboard() {
               <p className="text-center text-xs text-muted-foreground">Readings update automatically every 5 seconds.</p>
           </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6">
-          <div className="relative w-full max-w-[600px] aspect-square">
+          <div className="relative w-full max-w-[800px] aspect-square">
             <Image src="/multimeter.png" alt="Multimeter" fill objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-sm tracking-widest">
