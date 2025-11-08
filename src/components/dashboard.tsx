@@ -18,8 +18,8 @@ export default function Dashboard() {
   const { user, isUserLoading } = useUser();
   const database = useDatabase();
 
-  const readingRef = useMemoFirebase(() => (database ? ref(database, 'Multimeter reading/Value') : null), [database]);
-  const tempRef = useMemoFirebase(() => (database ? ref(database, 'Temp Reading/Value') : null), [database]);
+  const readingRef = useMemoFirebase(() => (database ? ref(database, 'reading') : null), [database]);
+  const tempRef = useMemoFirebase(() => (database ? ref(database, 'temperature') : null), [database]);
   
   const { data: latestReading, isLoading: isReadingLoading } = useRtdbValue<number>(readingRef);
   const { data: latestTemp, isLoading: isTempLoading } = useRtdbValue<number>(tempRef);
@@ -41,7 +41,7 @@ export default function Dashboard() {
               <CardDescription className="text-center">Live readings from Firebase RTDB.</CardDescription>
           </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6">
-          <div className="relative w-[600px] h-[600px] md:w-[600px] md:h-[600px]">
+          <div className="relative w-[700px] h-[700px] md:w-[700px] md:h-[700px]">
             <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-sm tracking-widest">
