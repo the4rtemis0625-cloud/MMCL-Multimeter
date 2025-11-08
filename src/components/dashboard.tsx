@@ -45,7 +45,7 @@ export default function Dashboard() {
               <CardDescription className="text-center">Live readings from Firebase RTDB.</CardDescription>
           </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6">
-          <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
+          <div className="relative w-[400px] h-[400px] md:w-[500px] md:h-[500px]">
             <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-sm tracking-widest">
