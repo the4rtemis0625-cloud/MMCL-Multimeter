@@ -18,8 +18,8 @@ export default function Dashboard() {
   const { user, isUserLoading } = useUser();
   const database = useDatabase();
 
-  const readingRef = useMemoFirebase(() => (database ? ref(database, 'reading') : null), [database]);
-  const tempRef = useMemoFirebase(() => (database ? ref(database, 'Temp') : null), [database]);
+  const readingRef = useMemoFirebase(() => (database ? ref(database, 'Multimeter reading/Value') : null), [database]);
+  const tempRef = useMemoFirebase(() => (database ? ref(database, 'Temp Reading/Value') : null), [database]);
   
   const { data: latestReading, isLoading: isReadingLoading } = useRtdbValue<number>(readingRef);
   const { data: latestTemp, isLoading: isTempLoading } = useRtdbValue<number>(tempRef);
