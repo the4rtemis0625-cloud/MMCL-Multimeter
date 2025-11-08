@@ -1,0 +1,183 @@
+{
+  "entities": {
+    "MultimeterReading": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "MultimeterReading",
+      "type": "object",
+      "description": "Represents a single reading from a multimeter.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the multimeter reading."
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "Identifier of the multimeter device that recorded the reading. (Relationship: Device 1:N MultimeterReading)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the reading was taken.",
+          "format": "date-time"
+        },
+        "voltage": {
+          "type": "number",
+          "description": "Voltage reading in volts."
+        },
+        "current": {
+          "type": "number",
+          "description": "Current reading in amperes."
+        },
+        "resistance": {
+          "type": "number",
+          "description": "Resistance reading in ohms."
+        }
+      },
+      "required": [
+        "id",
+        "deviceId",
+        "timestamp",
+        "voltage",
+        "current",
+        "resistance"
+      ]
+    },
+    "Device": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Device",
+      "type": "object",
+      "description": "Represents a multimeter device.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the multimeter device."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the multimeter device."
+        },
+        "model": {
+          "type": "string",
+          "description": "Model of the multimeter device."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "model"
+      ]
+    },
+    "Anomaly": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Anomaly",
+      "type": "object",
+      "description": "Represents a multimeter reading that exceeds a specified threshold.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the anomaly."
+        },
+        "readingId": {
+          "type": "string",
+          "description": "Reference to MultimeterReading. (Relationship: MultimeterReading 1:N Anomaly)"
+        },
+        "threshold": {
+          "type": "number",
+          "description": "The threshold value that was exceeded."
+        },
+        "parameter": {
+          "type": "string",
+          "description": "The parameter that exceeded the threshold (e.g., voltage, current, resistance)."
+        }
+      },
+      "required": [
+        "id",
+        "readingId",
+        "threshold",
+        "parameter"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/devices/{deviceId}",
+        "definition": {
+          "entityName": "Device",
+          "schema": {
+            "$ref": "#/backend/entities/Device"
+          },
+          "description": "Stores device information. Path-based ownership: only the user with the matching {userId} can access this device. Includes `userId` as a denormalized field to ensure authorization independence within subcollections.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the device."
+            },
+            {
+              "name": "deviceId",
+              "description": "The unique ID of the device."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/devices/{deviceId}/readings/{readingId}",
+        "definition": {
+          "entityName": "MultimeterReading",
+          "schema": {
+            "$ref": "#/backend/entities/MultimeterReading"
+          },
+          "description": "Stores multimeter readings for a specific device. Path-based ownership: only the user owning the device can access the readings. Includes denormalized `userId` and `deviceId` fields for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the device."
+            },
+            {
+              "name": "deviceId",
+              "description": "The unique ID of the device."
+            },
+            {
+              "name": "readingId",
+              "description": "The unique ID of the multimeter reading."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/devices/{deviceId}/readings/{readingId}/anomalies/{anomalyId}",
+        "definition": {
+          "entityName": "Anomaly",
+          "schema": {
+            "$ref": "#/backend/entities/Anomaly"
+          },
+          "description": "Stores anomalies detected for a specific multimeter reading. Path-based ownership: only the user owning the device and reading can access the anomalies. Includes denormalized `userId`, `deviceId`, and `readingId` for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The ID of the user who owns the device."
+            },
+            {
+              "name": "deviceId",
+              "description": "The unique ID of the device."
+            },
+            {
+              "name": "readingId",
+              "description": "The unique ID of the multimeter reading."
+            },
+            {
+              "name": "anomalyId",
+              "description": "The unique ID of the anomaly."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to securely store and manage multimeter readings, devices, and detected anomalies. It leverages path-based ownership for user-specific data and denormalization to ensure authorization independence, enabling efficient and secure data access. The structure allows for straightforward queries and adheres to the principle that rules are not filters, ensuring secure list operations. The design also supports invariants by enforcing consistency in ownership and timestamps."
+  }
+}

@@ -1,0 +1,96 @@
+/**
+ * @file Firestore Security Rules
+ * @description This ruleset enforces a strict user-ownership model for multimeter data.
+ *
+ * Data Structure:
+ * All data is nested under /users/{userId}, ensuring that data is isolated to individual users.
+ * - /users/{userId}/devices/{deviceId}: Stores device information, owned by the user.
+ * - /users/{userId}/devices/{deviceId}/readings/{readingId}: Stores multimeter readings for a device, owned by the user.
+ * - /users/{userId}/devices/{deviceId}/readings/{readingId}/anomalies/{anomalyId}: Stores anomaly data for a reading, owned by the user.
+ *
+ * Key Security Decisions:
+ * - User listing is disallowed to protect user privacy.
+ * - All write operations require a verified user identity (request.auth != null). Anonymous users can read data.
+ *
+ * Denormalization for Authorization:
+ * - Each subcollection includes denormalized userId and deviceId fields to allow authorization to be checked on the document itself instead of relying on the path.
+ * This ensures that a rogue client cannot create a document in the wrong user's path and bypass security.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Checks if the request is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the authenticated user ID matches the provided user ID.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the authenticated user is the owner of the existing document.
+     * @details Combines the ownership check with the existence check to prevent accidental operations on non-existent documents.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /**
+     * @description Rules for the /users/{userId}/devices/{deviceId} collection.
+     * @path /users/{userId}/devices/{deviceId}
+     * @allow (create) User 'user123' can create a new device with deviceId 'device456' under their own user ID if request.auth.uid == 'user123'.
+     * @deny (create) User 'user456' cannot create a device under user ID 'user123'.
+     * @allow (get) User 'user123' can read device 'device456' if request.auth.uid == 'user123'.
+     * @deny (get) User 'user456' cannot read device 'device456' under user ID 'user123'.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/devices/{deviceId} {
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == deviceId;
+      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Rules for the /users/{userId}/devices/{deviceId}/readings/{readingId} collection.
+     * @path /users/{userId}/devices/{deviceId}/readings/{readingId}
+     * @allow (create) User 'user123' can create a new reading with readingId 'reading789' for device 'device456' under their own user ID if request.auth.uid == 'user123'.
+     * @deny (create) User 'user456' cannot create a reading under user ID 'user123'.
+     * @allow (get) User 'user123' can read reading 'reading789' for device 'device456' if request.auth.uid == 'user123'.
+     * @deny (get) User 'user456' cannot read reading 'reading789' under user ID 'user123'.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/devices/{deviceId}/readings/{readingId} {
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.deviceId == deviceId;
+      allow update: if isExistingOwner(userId) && request.resource.data.deviceId == resource.data.deviceId;
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Rules for the /users/{userId}/devices/{deviceId}/readings/{readingId}/anomalies/{anomalyId} collection.
+     * @path /users/{userId}/devices/{deviceId}/readings/{readingId}/anomalies/{anomalyId}
+     * @allow (create) User 'user123' can create a new anomaly with anomalyId 'anomaly101' for reading 'reading789' of device 'device456' under their own user ID if request.auth.uid == 'user123'.
+     * @deny (create) User 'user456' cannot create an anomaly under user ID 'user123'.
+     * @allow (get) User 'user123' can read anomaly 'anomaly101' for reading 'reading789' of device 'device456' if request.auth.uid == 'user123'.
+     * @deny (get) User 'user456' cannot read anomaly 'anomaly101' under user ID 'user123'.
+     * @principle Enforces document ownership for writes.
+     */
+    match /users/{userId}/devices/{deviceId}/readings/{readingId}/anomalies/{anomalyId} {
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
+  }
+}
