@@ -1,9 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Loader2, Thermometer } from 'lucide-react';
 import Image from 'next/image';
 import {
   useDatabase,
@@ -13,9 +11,7 @@ import {
   useMemoFirebase,
   useRtdbValue,
 } from '@/firebase';
-import { ref, set } from 'firebase/database';
-
-const getRandom = (min: number, max: number) => parseFloat((Math.random() * (max - min) + min).toFixed(2));
+import { ref } from 'firebase/database';
 
 export default function Dashboard() {
   const auth = useAuth();
@@ -23,7 +19,7 @@ export default function Dashboard() {
   const database = useDatabase();
 
   const readingRef = useMemoFirebase(() => (database ? ref(database, 'reading') : null), [database]);
-  const tempRef = useMemoFirebase(() => (database ? ref(database, 'temperature') : null), [database]);
+  const tempRef = useMemoFirebase(() => (database ? ref(database, 'Temp') : null), [database]);
   
   const { data: latestReading, isLoading: isReadingLoading } = useRtdbValue<number>(readingRef);
   const { data: latestTemp, isLoading: isTempLoading } = useRtdbValue<number>(tempRef);
@@ -45,7 +41,7 @@ export default function Dashboard() {
               <CardDescription className="text-center">Live readings from Firebase RTDB.</CardDescription>
           </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6">
-          <div className="relative w-[500px] h-[500px] md:w-[600px] md:h-[600px]">
+          <div className="relative w-[600px] h-[600px] md:w-[600px] md:h-[600px]">
             <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-sm tracking-widest">
