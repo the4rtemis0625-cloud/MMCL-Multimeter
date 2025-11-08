@@ -1,4 +1,5 @@
 import { Gauge } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Header() {
   return (
@@ -8,6 +9,9 @@ export default function Header() {
         <h1 className="text-2xl font-bold tracking-tight text-foreground">
           MMCL Multimeter
         </h1>
+      </div>
+      <div className="ml-auto">
+        <Image src="/multimeter.png" alt="Multimeter" width={40} height={40} />
       </div>
     </header>
   );
