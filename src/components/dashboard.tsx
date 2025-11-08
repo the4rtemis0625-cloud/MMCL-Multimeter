@@ -12,6 +12,7 @@ import ReadingChart from './reading-chart';
 import AnomaliesTable from './anomalies-table';
 import { Zap, Waves, Omega, AlertTriangle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import Image from 'next/image';
 
 export default function Dashboard() {
   const [readings, setReadings] = useState<Reading[]>([]);
@@ -110,8 +111,8 @@ export default function Dashboard() {
       ) : (
          <Card className="flex flex-col items-center justify-center py-20">
             <CardContent className="text-center">
-                <h3 className="text-xl font-semibold text-muted-foreground">No data loaded</h3>
-                <p className="text-muted-foreground mt-2">Upload a file or generate sample data to begin analysis.</p>
+                <Image src="/multimeter.png" alt="Multimeter" width={200} height={200} className="mx-auto" />
+                <p className="text-muted-foreground mt-4">Upload a file or generate sample data to begin analysis.</p>
             </CardContent>
          </Card>
       )}
