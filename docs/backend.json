@@ -35,13 +35,7 @@
     "providers": [
       "anonymous"
     ]
-  },
-  "firestore": {
-    "/readings/{readingId}": {
-      "schema": {
-        "$ref": "#/backend/entities/MultimeterReading"
-      },
-      "description": "Stores all multimeter readings. Open for any user to create, but only owners can modify or delete."
-    }
   }
 }
+
+    

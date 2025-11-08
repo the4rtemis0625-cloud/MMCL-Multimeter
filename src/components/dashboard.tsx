@@ -1,34 +1,30 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { type Reading } from '@/types';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { TestTube2, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import {
-  useFirestore,
-  useCollection,
+  useDatabase,
   useUser,
   initiateAnonymousSignIn,
   useAuth,
   useMemoFirebase,
-  addDocumentNonBlocking,
+  useRtdbValue,
 } from '@/firebase';
-import { collection, query, orderBy, limit } from 'firebase/firestore';
+import { ref, set } from 'firebase/database';
 
 const getRandom = (min: number, max: number) => parseFloat((Math.random() * (max - min) + min).toFixed(2));
 
 export default function Dashboard() {
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
-  const firestore = useFirestore();
+  const database = useDatabase();
 
-  const readingsCollRef = useMemoFirebase(() => collection(firestore, 'readings'), [firestore]);
-  const readingsQuery = useMemoFirebase(() => query(readingsCollRef, orderBy('timestamp', 'desc'), limit(1)), [readingsCollRef]);
+  const readingRef = useMemoFirebase(() => (database ? ref(database, 'reading') : null), [database]);
   
-  const { data: readings, isLoading: isReadingsLoading } = useCollection<Reading>(readingsQuery);
-  const latestReading = readings?.[0] || null;
+  const { data: latestReading, isLoading: isReadingLoading } = useRtdbValue<number>(readingRef);
 
   useEffect(() => {
     if (!user && !isUserLoading) {
@@ -37,31 +33,26 @@ export default function Dashboard() {
   }, [user, isUserLoading, auth]);
 
   const simulateNewReading = () => {
-    if (!user || !firestore) return;
-    const newReading = {
-        timestamp: new Date(),
-        voltage: getRandom(4.8, 7.0),
-        current: getRandom(1.8, 3.5),
-        resistance: getRandom(95, 150),
-    };
-    addDocumentNonBlocking(readingsCollRef, newReading);
+    if (!user || !database || !readingRef) return;
+    const newReading = getRandom(1.8, 3.5);
+    set(readingRef, newReading);
   };
   
-  const isLoading = isUserLoading || isReadingsLoading;
+  const isLoading = isUserLoading || isReadingLoading;
 
   return (
     <div className="grid gap-6 justify-center">
       <Card>
           <CardHeader>
               <CardTitle className="text-center">MMCL Multimeter</CardTitle>
-              <CardDescription className="text-center">Live readings from Firebase Firestore.</CardDescription>
+              <CardDescription className="text-center">Live readings from Firebase RTDB.</CardDescription>
           </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6">
           <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
             <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-sm md:text-sm tracking-widest">
-                    {isLoading ? '...' : latestReading ? latestReading.current.toFixed(2) : '0.00'}
+                    {isLoading ? '...' : latestReading ? latestReading.toFixed(2) : '0.00'}
                 </p>
             </div>
           </div>
@@ -74,3 +65,4 @@ export default function Dashboard() {
     </div>
   );
 }
+    

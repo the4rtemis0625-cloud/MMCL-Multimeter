@@ -1,21 +1,2 @@
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
 
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    match /readings/{readingId} {
-      // Allow anyone to create a new reading.
-      allow create: if true;
-      
-      // Allow anyone to read all readings.
-      allow read: if true;
-
-      // Only the user who created the reading can update or delete it.
-      // This assumes a 'uid' field is added to the document on creation.
-      allow write: if isSignedIn() && resource.data.uid == request.auth.uid;
-    }
-  }
-}
+    
