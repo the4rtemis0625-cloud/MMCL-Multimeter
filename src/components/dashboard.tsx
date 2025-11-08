@@ -63,12 +63,6 @@ export default function Dashboard() {
                 </p>
             </div>
           </div>
-          <div className="flex gap-4 mt-8">
-            <Button onClick={simulateNewTemp} disabled={isLoading || !user} variant="outline">
-              {isTempLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Thermometer className="mr-2 h-4 w-4" />}
-              {isLoading ? 'Connecting...' : 'Simulate Temp'}
-            </Button>
-          </div>
         </CardContent>
       </Card>
     </div>
