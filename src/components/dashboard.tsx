@@ -63,8 +63,8 @@ export default function Dashboard() {
                     {isLoading ? '...' : latestReading ? latestReading.toFixed(2) : '0.00'}
                 </p>
             </div>
-            <div className="absolute top-[48%] left-[29%] w-[11%] h-[12%] bg-black/80 rounded-md flex items-center justify-center">
-                <p className="text-orange-400 font-mono text-xs tracking-widest">
+            <div className="absolute top-[49%] left-[29%] w-[10%] h-[11%] bg-black/80 rounded-md flex items-center justify-center">
+                <p className="text-orange-400 font-mono text-[10px] tracking-widest">
                     {isLoading ? '...' : latestTemp ? latestTemp.toFixed(1) : '0.0'}°C
                 </p>
             </div>
