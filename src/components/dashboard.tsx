@@ -59,7 +59,7 @@ export default function Dashboard() {
           <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
             <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
-                <p className="text-green-400 font-mono text-xs tracking-widest">
+                <p className="text-green-400 font-mono text-sm tracking-widest">
                     {isLoading ? '...' : latestReading ? latestReading.toFixed(2) : '0.00'}
                 </p>
             </div>
