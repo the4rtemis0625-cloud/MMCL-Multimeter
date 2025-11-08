@@ -3,8 +3,10 @@
     "reading": {
       ".read": true,
       ".write": "auth != null"
+    },
+    "temperature": {
+      ".read": true,
+      ".write": "auth != null"
     }
   }
 }
-
-    

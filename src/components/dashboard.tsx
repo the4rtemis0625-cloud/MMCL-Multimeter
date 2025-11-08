@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { TestTube2, Loader2 } from 'lucide-react';
+import { TestTube2, Loader2, Thermometer } from 'lucide-react';
 import Image from 'next/image';
 import {
   useDatabase,
@@ -23,8 +23,10 @@ export default function Dashboard() {
   const database = useDatabase();
 
   const readingRef = useMemoFirebase(() => (database ? ref(database, 'reading') : null), [database]);
+  const tempRef = useMemoFirebase(() => (database ? ref(database, 'temperature') : null), [database]);
   
   const { data: latestReading, isLoading: isReadingLoading } = useRtdbValue<number>(readingRef);
+  const { data: latestTemp, isLoading: isTempLoading } = useRtdbValue<number>(tempRef);
 
   useEffect(() => {
     if (!user && !isUserLoading) {
@@ -37,8 +39,14 @@ export default function Dashboard() {
     const newReading = getRandom(1.8, 3.5);
     set(readingRef, newReading);
   };
+
+  const simulateNewTemp = () => {
+    if (!user || !database || !tempRef) return;
+    const newTemp = getRandom(18, 25);
+    set(tempRef, newTemp);
+  };
   
-  const isLoading = isUserLoading || isReadingLoading;
+  const isLoading = isUserLoading || isReadingLoading || isTempLoading;
 
   return (
     <div className="grid gap-6 justify-center">
@@ -55,11 +63,22 @@ export default function Dashboard() {
                     {isLoading ? '...' : latestReading ? latestReading.toFixed(2) : '0.00'}
                 </p>
             </div>
+            <div className="absolute top-[35%] left-[20%] w-[13%] h-[8%] bg-black/80 rounded-md flex items-center justify-center">
+                <p className="text-orange-400 font-mono text-xs md:text-sm tracking-widest">
+                    {isLoading ? '...' : latestTemp ? latestTemp.toFixed(1) : '0.0'}°C
+                </p>
+            </div>
           </div>
-          <Button onClick={simulateNewReading} className="mt-8" disabled={isLoading || !user}>
-            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <TestTube2 className="mr-2 h-4 w-4" />}
-            {isLoading ? 'Connecting...' : 'Simulate Reading'}
-          </Button>
+          <div className="flex gap-4 mt-8">
+            <Button onClick={simulateNewReading} disabled={isLoading || !user}>
+              {isReadingLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <TestTube2 className="mr-2 h-4 w-4" />}
+              {isLoading ? 'Connecting...' : 'Simulate Reading'}
+            </Button>
+            <Button onClick={simulateNewTemp} disabled={isLoading || !user} variant="outline">
+              {isTempLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Thermometer className="mr-2 h-4 w-4" />}
+              {isLoading ? 'Connecting...' : 'Simulate Temp'}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>
