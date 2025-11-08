@@ -19,7 +19,7 @@ export default function Dashboard() {
   const database = useDatabase();
 
   const readingRef = useMemoFirebase(() => (database ? ref(database, 'reading') : null), [database]);
-  const tempRef = useMemoFirebase(() => (database ? ref(database, 'temperature') : null), [database]);
+  const tempRef = useMemoFirebase(() => (database ? ref(database, 'temp/Value') : null), [database]);
   
   const { data: latestReading, isLoading: isReadingLoading } = useRtdbValue<number>(readingRef);
   const { data: latestTemp, isLoading: isTempLoading } = useRtdbValue<number>(tempRef);
