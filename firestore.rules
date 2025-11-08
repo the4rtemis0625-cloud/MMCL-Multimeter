@@ -11,11 +11,11 @@ service cloud.firestore {
       allow create: if true;
       
       // Allow anyone to read all readings.
-      allow get, list: if true;
+      allow read: if true;
 
       // Only the user who created the reading can update or delete it.
       // This assumes a 'uid' field is added to the document on creation.
-      allow update, delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+      allow write: if isSignedIn() && resource.data.uid == request.auth.uid;
     }
   }
 }
