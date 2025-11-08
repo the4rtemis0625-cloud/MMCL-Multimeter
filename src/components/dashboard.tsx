@@ -35,15 +35,15 @@ export default function Dashboard() {
 
   return (
     <div className="grid gap-6 justify-center">
-      <Card>
+      <Card className="w-full">
           <CardHeader>
               <CardTitle className="text-center">MMCL Multimeter</CardTitle>
               <CardDescription className="text-center">Live readings from Firebase RTDB.</CardDescription>
-              <p className="text-center text-xs text-muted-foreground">Readings update automatically.</p>
+              <p className="text-center text-xs text-muted-foreground">Readings update automatically every 5 seconds.</p>
           </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6">
-          <div className="relative w-[800px] h-[800px] md:w-[800px] md:h-[800px]">
-            <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
+          <div className="relative w-full max-w-[600px] aspect-square">
+            <Image src="/multimeter.png" alt="Multimeter" fill objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-sm tracking-widest">
                     {isLoading ? '...' : typeof latestReading === 'number' ? latestReading.toFixed(2) : '0.00'}
