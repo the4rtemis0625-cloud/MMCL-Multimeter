@@ -1,6 +1,8 @@
+import { type Timestamp } from 'firebase/firestore';
+
 export type Reading = {
-  id: number;
-  timestamp: string;
+  id: string; // Firestore document ID
+  timestamp: Timestamp | Date;
   voltage: number;
   current: number;
   resistance: number;
