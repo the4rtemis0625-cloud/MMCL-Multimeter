@@ -39,9 +39,10 @@ export default function Dashboard() {
           <CardHeader>
               <CardTitle className="text-center">MMCL Multimeter</CardTitle>
               <CardDescription className="text-center">Live readings from Firebase RTDB.</CardDescription>
+              <p className="text-center text-xs text-muted-foreground">Readings update automatically.</p>
           </CardHeader>
         <CardContent className="flex flex-col items-center justify-center p-6">
-          <div className="relative w-[700px] h-[700px] md:w-[700px] md:h-[700px]">
+          <div className="relative w-[800px] h-[800px] md:w-[800px] md:h-[800px]">
             <Image src="/multimeter.png" alt="Multimeter" layout="fill" objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-sm tracking-widest">
