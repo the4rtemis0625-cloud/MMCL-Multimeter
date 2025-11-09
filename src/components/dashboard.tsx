@@ -83,8 +83,8 @@ export default function Dashboard() {
                 </p>
             </div>
           </div>
-          <button onClick={handleSimulateVoltage} className="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"></button>
-          <button onClick={handleSimulateAmperage} className="absolute bottom-4 right-4 w-16 h-16 rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"></button>
+          <button onClick={handleSimulateVoltage} className="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 border"></button>
+          <button onClick={handleSimulateAmperage} className="absolute bottom-4 right-4 w-16 h-16 rounded-full bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 border"></button>
         </CardContent>
       </Card>
     </div>
