@@ -46,12 +46,12 @@ export default function Dashboard() {
             <Image src="/multimeter.png" alt="Multimeter" fill objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-[8px] sm:text-xs md:text-sm lg:text-base tracking-widest">
-                    {isLoading ? '...' : typeof latestReading === 'number' ? latestReading.toFixed(2) : '0.00'}
+                    {isLoading ? '...' : typeof latestReading === 'number' ? `${latestReading.toFixed(2)} V` : '0.00 V'}
                 </p>
             </div>
             <div className="absolute top-[49%] left-[29%] w-[10%] h-[11%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-orange-400 font-mono text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs tracking-widest">
-                    {isLoading ? '...' : typeof latestTemp === 'number' ? latestTemp.toFixed(1) : '0.0'}°C
+                    {isLoading ? '...' : typeof latestTemp === 'number' ? `${latestTemp.toFixed(1)} A` : '0.0 A'}
                 </p>
             </div>
           </div>
