@@ -45,15 +45,19 @@ export default function Dashboard() {
           <div className="relative w-full max-w-[800px] aspect-square">
             <Image src="/multimeter.png" alt="Multimeter" fill objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
-                <p className="text-green-400 font-mono text-[8px] sm:text-xs md:text-sm tracking-widest">
+                <p className="text-green-400 font-mono text-[8px] sm:text-xs md:text-sm lg:text-base tracking-widest">
                     {isLoading ? '...' : typeof latestReading === 'number' ? latestReading.toFixed(2) : '0.00'}
                 </p>
             </div>
             <div className="absolute top-[49%] left-[29%] w-[10%] h-[11%] bg-black/80 rounded-md flex items-center justify-center">
-                <p className="text-orange-400 font-mono text-[6px] sm:text-[8px] md:text-[10px] tracking-widest">
+                <p className="text-orange-400 font-mono text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs tracking-widest">
                     {isLoading ? '...' : typeof latestTemp === 'number' ? latestTemp.toFixed(1) : '0.0'}°C
                 </p>
             </div>
+          </div>
+          <div className="flex gap-4 mt-4">
+            <button className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"></button>
+            <button className="w-8 h-8 rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"></button>
           </div>
         </CardContent>
       </Card>
