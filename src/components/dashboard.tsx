@@ -70,7 +70,7 @@ export default function Dashboard() {
               <p className="text-center text-xs text-muted-foreground">Readings update automatically every 5 seconds.</p>
           </CardHeader>
         <CardContent className="relative flex flex-col items-center p-6">
-          <div className="relative w-full max-w-[800px] aspect-square">
+          <div className="relative w-full max-w-[1200px] aspect-square">
             <Image src="/multimeter.png" alt="Multimeter" fill objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-[8px] sm:text-xs md:text-sm lg:text-base tracking-widest">
@@ -83,8 +83,8 @@ export default function Dashboard() {
                 </p>
             </div>
           </div>
-          <button onClick={handleSimulateVoltage} className="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 border"></button>
-          <button onClick={handleSimulateAmperage} className="absolute bottom-4 right-4 w-16 h-16 rounded-full bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 border"></button>
+          <button onClick={handleSimulateVoltage} className="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-white hover:bg-gray-100 focus:outline-none border"></button>
+          <button onClick={handleSimulateAmperage} className="absolute bottom-4 right-4 w-16 h-16 rounded-full bg-white hover:bg-gray-100 focus:outline-none border"></button>
         </CardContent>
       </Card>
     </div>
