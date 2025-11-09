@@ -51,7 +51,7 @@ export default function Dashboard() {
             </div>
             <div className="absolute top-[49%] left-[29%] w-[10%] h-[11%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-orange-400 font-mono text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs tracking-widest">
-                    {isLoading ? '...' : typeof latestTemp === 'number' ? `${latestTemp.toFixed(1)} A` : '0.0 A'}
+                    {isLoading ? '...' : typeof latestTemp === 'number' ? `${latestTemp.toFixed(1)} °C` : '0.0 °C'}
                 </p>
             </div>
           </div>
