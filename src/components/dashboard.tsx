@@ -69,7 +69,7 @@ export default function Dashboard() {
               <CardDescription className="text-center">Live readings from Firebase RTDB.</CardDescription>
               <p className="text-center text-xs text-muted-foreground">Readings update automatically every 5 seconds.</p>
           </CardHeader>
-        <CardContent className="flex flex-col items-center p-6">
+        <CardContent className="relative flex flex-col items-center p-6">
           <div className="relative w-full max-w-[800px] aspect-square">
             <Image src="/multimeter.png" alt="Multimeter" fill objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
@@ -83,10 +83,8 @@ export default function Dashboard() {
                 </p>
             </div>
           </div>
-          <div className="flex gap-4 mt-4">
-            <button onClick={handleSimulateVoltage} className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"></button>
-            <button onClick={handleSimulateAmperage} className="w-8 h-8 rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"></button>
-          </div>
+          <button onClick={handleSimulateVoltage} className="absolute bottom-4 left-4 w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"></button>
+          <button onClick={handleSimulateAmperage} className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"></button>
         </CardContent>
       </Card>
     </div>
