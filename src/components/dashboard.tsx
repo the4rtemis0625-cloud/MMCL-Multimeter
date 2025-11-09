@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import {
@@ -11,12 +11,13 @@ import {
   useMemoFirebase,
   useRtdbValue,
 } from '@/firebase';
-import { ref } from 'firebase/database';
+import { ref, set } from 'firebase/database';
 
 export default function Dashboard() {
   const auth = useAuth();
   const { user, isUserLoading } = useUser();
   const database = useDatabase();
+  const [simulatedVoltage, setSimulatedVoltage] = useState<number | null>(null);
 
   const readingRef = useMemoFirebase(() => (database ? ref(database, 'reading') : null), [database]);
   const tempRef = useMemoFirebase(() => (database ? ref(database, 'Temp') : null), [database]);
@@ -30,8 +31,13 @@ export default function Dashboard() {
     }
   }, [user, isUserLoading, auth]);
 
+  const handleSimulateVoltage = () => {
+    const randomVoltage = Math.random() * 99 + 1;
+    setSimulatedVoltage(randomVoltage);
+  };
   
   const isLoading = isUserLoading || isReadingLoading || isTempLoading;
+  const displayVoltage = simulatedVoltage !== null ? simulatedVoltage : latestReading;
 
   return (
     <div className="grid gap-6">
@@ -46,7 +52,7 @@ export default function Dashboard() {
             <Image src="/multimeter.png" alt="Multimeter" fill objectFit="contain" />
             <div className="absolute top-[27%] left-[46%] w-[13%] h-[10%] bg-black/80 rounded-md flex items-center justify-center">
                 <p className="text-green-400 font-mono text-[8px] sm:text-xs md:text-sm lg:text-base tracking-widest">
-                    {isLoading ? '...' : typeof latestReading === 'number' ? `${latestReading.toFixed(2)} V` : '0.00 V'}
+                    {isLoading ? '...' : typeof displayVoltage === 'number' ? `${displayVoltage.toFixed(2)} V` : '0.00 V'}
                 </p>
             </div>
             <div className="absolute top-[49%] left-[29%] w-[10%] h-[11%] bg-black/80 rounded-md flex items-center justify-center">
@@ -56,7 +62,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="flex gap-4 mt-4">
-            <button className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"></button>
+            <button onClick={handleSimulateVoltage} className="w-8 h-8 rounded-full bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"></button>
             <button className="w-8 h-8 rounded-full bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"></button>
           </div>
         </CardContent>
